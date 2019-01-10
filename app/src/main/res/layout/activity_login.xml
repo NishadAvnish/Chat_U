@@ -53,6 +53,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:text="Login"
+        android:onClick="login"
         android:textStyle="bold"
         android:textSize="20sp"
         android:padding="8dp"/>
