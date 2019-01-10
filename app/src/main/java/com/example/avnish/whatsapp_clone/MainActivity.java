@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         setSupportActionBar(toolbar);
-        getActionBar().setTitle("Whatsapp");
+        getSupportActionBar().setTitle("Whatsapp");
 
         greenAdapter greenAdapter= new greenAdapter(getSupportFragmentManager());
 
