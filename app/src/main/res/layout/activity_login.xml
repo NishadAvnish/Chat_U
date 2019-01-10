@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        android:textSize="20sp"
+        android:gravity="center"
+
+        />
+
+    <EditText
+        android:layout_marginTop="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:inputType="textEmailAddress"
+        android:hint="Email"
+        android:id="@+id/email"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:inputType="textPassword"
+        android:hint="password"
+        android:layout_marginTop="20dp"
+        android:id="@+id/password"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="FORGET PASSWORD"
+        android:textSize="15sp"
+        android:id="@+id/forgetpassword"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Login"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:padding="8dp"/>
+    <TextView
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="NEW HERE ?,  REGISTER"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/loginusingphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="LOGIN USING PHONE"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+</LinearLayout>
