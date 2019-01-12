@@ -1,6 +1,7 @@
 package com.example.avnish.whatsapp_clone;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.example.avnish.whatsapp_clone.fragment.greenAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(myViewPager);
 
+
     }
 
     @Override
     protected void onStart() {
+        currentUser=(FirebaseAuth.getInstance()).getCurrentUser();
         if(currentUser==null){
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
@@ -44,4 +48,6 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onStart();
     }
+
+
 }
