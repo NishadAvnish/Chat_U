@@ -1,4 +1,4 @@
-package com.example.avnish.whatsapp_clone;
+package com.example.avnish.whatsapp_clone.Login;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -8,13 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.avnish.whatsapp_clone.MainActivity;
+import com.example.avnish.whatsapp_clone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        flag=0;
 
         initialize();
 
@@ -90,11 +92,15 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     progressBar.dismiss();
-                                    Toast.makeText(LoginActivity.this, "Account Login created", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, "Account Login", Toast.LENGTH_LONG).show();
                                     currentUser = mAuth.getCurrentUser();
-                                    if(currentUser.isEmailVerified()){
+
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);}
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+
+
                                 } else {
                                     progressBar.dismiss();
                                     String msg = task.getException().toString();
@@ -108,24 +114,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-    private void emailVerification() {
-        if(flag==0){
-        currentUser.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            AlertDialog.Builder alertdialog= new AlertDialog.Builder(LoginActivity.this);
-                            alertdialog.setMessage("VERIFY YOUR EMAIL ADDRESS")
-                            .setCancelable(true);
-                            AlertDialog alertDialog= alertdialog.create();
-                            alertDialog.show();
-                            flag=1;
-
-                        }
-                    }
-                });}
-    }
 
 
     //INITIALIZE ALL THE VARIABLE

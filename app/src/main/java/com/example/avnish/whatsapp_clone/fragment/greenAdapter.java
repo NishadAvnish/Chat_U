@@ -9,7 +9,6 @@ public class greenAdapter extends FragmentStatePagerAdapter {
     public greenAdapter(FragmentManager fm) {
         super(fm);
     }
-
     @Override
     public Fragment getItem(int i) {
         switch(i){

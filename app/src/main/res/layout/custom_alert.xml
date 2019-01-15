@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f2cc8a">
+
+    <TextView
+        android:text="CHOOSE ANY ONE"
+        android:textSize="30sp"
+        android:textStyle="bold|italic"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#5ff754"
+
+        />
+    <Button
+        android:id="@+id/gallery"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GALLERY"
+        android:background="#ffffff"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="30sp"
+        android:padding="10sp"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:id="@+id/camera"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CAMERA"
+        android:background="#ffffff"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="30sp"
+        android:padding="10sp"
+        android:textStyle="bold"
+        />
+
+
+
+</LinearLayout>

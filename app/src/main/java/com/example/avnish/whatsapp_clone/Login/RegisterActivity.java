@@ -1,4 +1,4 @@
-package com.example.avnish.whatsapp_clone;
+package com.example.avnish.whatsapp_clone.Login;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -7,18 +7,19 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.avnish.whatsapp_clone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText name,email,password;
@@ -26,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressDialog progressBar;
     FirebaseAuth mauth;
     FirebaseUser currentUser;
+    DatabaseReference databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
 
                                 progressBar.dismiss();
-                                currentUser=mauth.getCurrentUser();
+                                String currentuserId= mauth.getCurrentUser().getUid();
+                                databaseRef.child("User").child(currentuserId).setValue("");
                                 Toast toast= Toast.makeText(RegisterActivity.this,"Account Successfully created",Toast.LENGTH_LONG);
                                 toast.show();
                                 login(Email,Password);
@@ -89,7 +92,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 currentUser=mauth.getCurrentUser();
                 Intent i= new Intent(RegisterActivity.this,LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+                finish();
 
             }
         });
@@ -123,5 +128,6 @@ public class RegisterActivity extends AppCompatActivity {
         register=findViewById(R.id.register);
         progressBar=new ProgressDialog(this);
         mauth=FirebaseAuth.getInstance();
+        databaseRef=FirebaseDatabase.getInstance().getReference();
     }
 }
