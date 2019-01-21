@@ -1,29 +1,38 @@
 package com.example.avnish.whatsapp_clone;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.images.internal.ImageUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 
-public class Setting_Activity extends AppCompatActivity {
+public class Setting_Activity extends AppCompatActivity implements View.OnClickListener{
     EditText name,status;
     Button update;
-    ImageView face;
+    ImageView face,takeimage;
     DatabaseReference databaseRef;
     FirebaseAuth mAuth;
     String currentUserID;
@@ -110,6 +119,64 @@ public class Setting_Activity extends AppCompatActivity {
 
     }
 
+    public void takeImage(View view){
+        ViewGroup viewGroup=findViewById(android.R.id.content);
+        View view1= LayoutInflater.from(this).inflate(R.layout.custom_alert,viewGroup,false);
+
+        AlertDialog.Builder builder= new AlertDialog.Builder(Setting_Activity.this);
+
+        builder.setView(view1);
+
+        Button camera= (Button)view1.findViewById(R.id.camera);
+        Button gallery=(Button)view1.findViewById(R.id.gallery);
+
+        builder.setCancelable(true);
+
+
+        AlertDialog alertDialog= builder.create();
+        alertDialog.show();
+
+        gallery.setOnClickListener(this);
+        camera.setOnClickListener(this);
+
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.gallery: startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), 1);
+                               break;
+            case R.id.camera: Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+               startActivityForResult(takePicture, 0);
+               break;
+
+        }
+
+
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //for gallery
+        if(resultCode==RESULT_OK && data!=null) {
+
+            Uri imageUri = data.getData();
+            CropImage.activity(imageUri)
+                    .setAspectRatio(1, 1)
+                    .setMinCropWindowSize(500, 500)
+                    .start(this);
+        }
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            }
+
+
+    }
+
 
 
     public void initialize(){
@@ -117,8 +184,11 @@ public class Setting_Activity extends AppCompatActivity {
        status=findViewById(R.id.status);
        update=findViewById(R.id.update);
        name=findViewById(R.id.Name);
+       takeimage=findViewById(R.id.takeimage);
        databaseRef=FirebaseDatabase.getInstance().getReference();
        mAuth=FirebaseAuth.getInstance();
        currentUserID= mAuth.getCurrentUser().getUid();
     }
+
+
 }

@@ -8,15 +8,27 @@
     tools:context=".Setting_Activity">
 
     <include layout="@layout/toolbar"/>
-
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/face"
-        android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:id="@+id/image"
         />
+
+        <ImageView
+            android:id="@+id/takeimage"
+            android:layout_width="60dp"
+            android:onClick="takeImage"
+            android:layout_height="60dp"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/ic_camera_black_24dp" />
+    </FrameLayout>
+
 
     <EditText
         android:id="@+id/Name"
