@@ -1,5 +1,6 @@
 package com.example.avnish.whatsapp_clone;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,12 +19,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -34,9 +42,14 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
     Button update;
     ImageView face,takeimage;
     DatabaseReference databaseRef;
+    StorageReference firebaseStorageref;
     FirebaseAuth mAuth;
     String currentUserID;
-   Integer count=1;
+    Integer count=1;
+    String downloadUrl;
+    AlertDialog alertDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,17 +110,20 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
-                if(((dataSnapshot.exists())&& (dataSnapshot.hasChild("Name"))&&(dataSnapshot.hasChild("Status")))){
+                if(((dataSnapshot.exists())&& (dataSnapshot.hasChild("Name"))&&(dataSnapshot.hasChild("Status")))&& dataSnapshot.hasChild("Image")){
                     String mName=dataSnapshot.child("Name").getValue().toString();
                     String mStatus=dataSnapshot.child("Status").getValue().toString();
                     name.setText(mName);
                     status.setText(mStatus);
+                    Picasso.get().load("https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiSnZ7T14DgAhXMuI8KHRtiCl8QMwhnKAEwAQ&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMinions_(Despicable_Me)&psig=AOvVaw08Qdlb6vqKabxMn6Km9Kmg&ust=1548222300582881&ictx=3&uact=3").into(face);
 
                 }
 
                 else if(((dataSnapshot.exists())&& (dataSnapshot.hasChild("Name")))){
                     String mName=dataSnapshot.child("Name").getValue().toString();
+                    String mStatus=dataSnapshot.child("Status").getValue().toString();
                     name.setText(mName);
+                    status.setText(mStatus);
                 }
             }
 
@@ -118,6 +134,9 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
         });
 
     }
+
+
+    // Use gallery and camera for profile image
 
     public void takeImage(View view){
         ViewGroup viewGroup=findViewById(android.R.id.content);
@@ -133,7 +152,7 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
         builder.setCancelable(true);
 
 
-        AlertDialog alertDialog= builder.create();
+        alertDialog= builder.create();
         alertDialog.show();
 
         gallery.setOnClickListener(this);
@@ -147,10 +166,10 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.gallery: startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), 1);
-                               break;
+                               return;
             case R.id.camera: Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                startActivityForResult(takePicture, 0);
-               break;
+               return;
 
         }
 
@@ -162,7 +181,7 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
         //for gallery
         if(resultCode==RESULT_OK && data!=null) {
-
+            alertDialog.cancel();
             Uri imageUri = data.getData();
             CropImage.activity(imageUri)
                     .setAspectRatio(1, 1)
@@ -171,11 +190,30 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
         }
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
+               if(resultCode==RESULT_OK){
+                    Uri resulturi=result.getUri();
+
+                    //progress dialog
+                    final ProgressDialog progressDialog= new ProgressDialog(this);
+                    progressDialog.setMessage("wait until we work for you");
+                    progressDialog.show();
+
+                    (firebaseStorageref.child(currentUserID + ".jpg")).putFile(resulturi).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if(task.isSuccessful()){
+                                downloadUrl=task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+                                databaseRef.child("User").child(currentUserID).child("Image").setValue(downloadUrl);
+                                Toast.makeText(Setting_Activity.this,"Successfully uploaded",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
 
             }
 
 
-    }
+    }}
 
 
 
@@ -186,8 +224,11 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
        name=findViewById(R.id.Name);
        takeimage=findViewById(R.id.takeimage);
        databaseRef=FirebaseDatabase.getInstance().getReference();
+       firebaseStorageref=FirebaseStorage.getInstance().getReference("profilepic");
        mAuth=FirebaseAuth.getInstance();
        currentUserID= mAuth.getCurrentUser().getUid();
+       face=findViewById(R.id.image);
+
     }
 
 
