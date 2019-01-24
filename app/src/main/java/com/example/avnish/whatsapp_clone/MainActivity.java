@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String groupName1= groupName.getText().toString();
-                        databaseReference.child("Group").setValue(groupName1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        databaseReference.child("Group").child(groupName1).setValue("").addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(MainActivity.this,"group created",Toast.LENGTH_SHORT).show();

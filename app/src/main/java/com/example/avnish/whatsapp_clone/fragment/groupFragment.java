@@ -7,9 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.avnish.whatsapp_clone.R;
 import com.example.avnish.whatsapp_clone.RecyclerView.GreenAdapter;
@@ -34,20 +36,21 @@ public class groupFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_group,container,false);
 
         listView=(RecyclerView) view.findViewById(R.id.listview);
-        final ArrayList<databook> arrayList= new ArrayList<>(2);
+        final ArrayList<databook> arrayList= new ArrayList<>();
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getActivity());
         listView.setLayoutManager(linearLayoutManager);
         listView.setHasFixedSize(true);
 
 
-        (FirebaseDatabase.getInstance().getReference("Group")).addValueEventListener(new ValueEventListener() {
+
+        (FirebaseDatabase.getInstance().getReference().child("Group")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    iterator= dataSnapshot.getChildren().iterator();
-                    while(iterator.hasNext())
-                    {
-                    arrayList.add(new databook(((DataSnapshot)iterator.next()).getKey()));}
+                    for(DataSnapshot child: dataSnapshot.getChildren()){
+                        arrayList.add(new databook(child.getKey()));
+
+                    }
                 }
             }
 
@@ -55,11 +58,10 @@ public class groupFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-
         });
 
 
-        GreenAdapter greenAdapter= new GreenAdapter(arrayList,getContext());
+        GreenAdapter greenAdapter = new GreenAdapter(arrayList);
 
         listView.setAdapter(greenAdapter);
 
