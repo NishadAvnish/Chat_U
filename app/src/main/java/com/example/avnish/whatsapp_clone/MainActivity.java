@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     AlertDialog alertDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,14 +40,14 @@ public class MainActivity extends AppCompatActivity {
             toolbar = findViewById(R.id.toolbar);
             tabLayout = findViewById(R.id.tablayout);
             myViewPager = findViewById(R.id.viewpager);
-            databaseReference=FirebaseDatabase.getInstance().getReference();
+            databaseReference = FirebaseDatabase.getInstance().getReference();
 
         }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Whatsapp");
 
-        greenAdapter greenAdapter= new greenAdapter(getSupportFragmentManager());
+        greenAdapter greenAdapter = new greenAdapter(getSupportFragmentManager());
 
         myViewPager.setAdapter(greenAdapter);
 
@@ -57,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        currentUser=(FirebaseAuth.getInstance()).getCurrentUser();
-        if(currentUser==null){
-            Intent intent = new Intent(this,LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        currentUser = (FirebaseAuth.getInstance()).getCurrentUser();
+        if (currentUser == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
 
@@ -69,18 +70,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     ////MENU INFLATOR
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
 
-       return true;
+        return true;
     }
 
     @Override
@@ -88,53 +84,52 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
 
-            case R.id.setting: {Intent intent = new Intent(MainActivity.this, Setting_Activity.class);
-                                 startActivity(intent);
-                                 break;
+            case R.id.setting: {
+                Intent intent = new Intent(MainActivity.this, Setting_Activity.class);
+                startActivity(intent);
+                break;
             }
 
             case R.id.menufindfriend: {
             }
 
-            case R.id.menulogout:{mAuth.signOut();
-                                 Intent intent= new Intent(MainActivity.this,LoginActivity.class);
-                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                 startActivity(intent);
-                                 finish();}
-
-
+            case R.id.menulogout: {
+                mAuth.signOut();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
 
 
             case R.id.creategroup: {
-                AlertDialog.Builder builder= new AlertDialog.Builder(this);
-                final EditText groupName=new EditText(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                final EditText groupName = new EditText(this);
                 builder.setView(groupName)
                         .setCancelable(true)
                         .setTitle("Enter the group name");
                 builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String groupName1= groupName.getText().toString();
+                        String groupName1 = groupName.getText().toString();
                         databaseReference.child("Group").child(groupName1).setValue("").addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(MainActivity.this,"group created",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "group created", Toast.LENGTH_SHORT).show();
                                 alertDialog.dismiss();
 
                             }
                         });
                     }
                 });
-                alertDialog= builder.create();
+                alertDialog = builder.create();
                 alertDialog.show();
 
             }
 
 
-
-
         }
         return true;
-        }
+    }
 }
 
