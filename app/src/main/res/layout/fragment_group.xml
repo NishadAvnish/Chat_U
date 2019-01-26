@@ -10,7 +10,10 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:dividerHeight="10dp"
-       android:divider="#96e7f4">
+       android:divider="#96e7f4"
+       android:minHeight="20sp"
+       android:padding="10dp"
+       >
 
    </ListView>
 
