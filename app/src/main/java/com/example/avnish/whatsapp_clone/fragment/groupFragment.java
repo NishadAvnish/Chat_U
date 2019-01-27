@@ -23,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
+
 public class groupFragment extends Fragment {
 
     ListView listview;
@@ -46,10 +48,6 @@ public class groupFragment extends Fragment {
         });
 
 
-
-
-
-
         return view;
 
     }
@@ -62,6 +60,7 @@ public class groupFragment extends Fragment {
 
 
     }
+
     private void retriveAndDisplay() {
         FirebaseDatabase.getInstance().getReference().child("Group").addValueEventListener(new ValueEventListener() {
             @Override
