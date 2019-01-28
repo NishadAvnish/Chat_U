@@ -8,24 +8,28 @@
     tools:context=".Setting_Activity">
 
     <include layout="@layout/toolbar"/>
+
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/face"
-        android:layout_marginTop="20dp"
-        android:id="@+id/image"
-        />
+        android:layout_gravity="center">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/face"
+                app:civ_border_width="2dp"
+                />
 
         <ImageView
             android:id="@+id/takeimage"
             android:layout_width="60dp"
-            android:onClick="takeImage"
             android:layout_height="60dp"
-            android:layout_gravity="right|bottom"
+            android:layout_gravity="center|bottom"
+            android:onClick="takeImage"
             android:src="@drawable/ic_camera_black_24dp" />
     </FrameLayout>
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import com.example.avnish.whatsapp_clone.R;
 import com.example.avnish.whatsapp_clone.REcyclerView.adapter;
@@ -40,6 +41,7 @@ public class Group_Chat extends AppCompatActivity {
     HashMap<String,String> map;
     ArrayList<databook> arrayList=null;
     adapter mAdapter;
+    ScrollView scrollView;
 
 
     @Override
@@ -54,14 +56,14 @@ public class Group_Chat extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(currentGroupName);
 
-          checkUserName();  //convert the data value from firebase into object
+          retrieve();  //convert the data value from firebase into object
           writeData();
         }
 
 
     }
 
-    private void checkUserName() {
+    private void retrieve() {
         arrayList= new ArrayList<>();
         FirebaseDatabase.getInstance().getReference("Group").child(currentGroupName).addValueEventListener(new ValueEventListener() {
             @Override
@@ -71,11 +73,12 @@ public class Group_Chat extends AppCompatActivity {
 
                      arrayList.add(dataSnapshot1.getValue(databook.class));
                     // mAdapter.notifyDataSetChanged();
+                   scrollView.fullScroll(View.FOCUS_DOWN);
                 }
 
-               // arrayList.add(new databook("date","time","name","gfgcg"));
                 mAdapter= new adapter(arrayList,name());
                 recyclerView.setAdapter(mAdapter);
+
             }
 
             @Override
@@ -114,6 +117,8 @@ public class Group_Chat extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             sendEdit.setText("");
+                            scrollView.fullScroll(View.FOCUS_DOWN);
+
                         }
                     });
 
@@ -150,7 +155,10 @@ public class Group_Chat extends AppCompatActivity {
         send_btn=findViewById(R.id.sendbtn);
         currentUserId=(FirebaseAuth.getInstance().getCurrentUser().getUid());
         recyclerView=findViewById(R.id.Recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
+        ;
+        recyclerView.setLayoutManager(linearLayoutManager);
+        scrollView=findViewById(R.id.scollview);
         }
 
 }

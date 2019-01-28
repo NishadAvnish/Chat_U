@@ -15,11 +15,12 @@ public class greenAdapter extends FragmentStatePagerAdapter {
             case 0: chatfragment chatFragment=new chatfragment();
                      return chatFragment;
 
-            case 1: ContactFragment contactFragment= new ContactFragment();
-                    return contactFragment;
-
-            case 2:groupFragment groupFragment= new groupFragment();
+            case 1:groupFragment groupFragment= new groupFragment();
                     return groupFragment;
+
+            case 2: AllUserFragment allUserFragment = new AllUserFragment();
+                return allUserFragment;
+
             default:
                 return null;
         }
@@ -37,8 +38,8 @@ public class greenAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch(position){
             case 0: return "CHAT";
-            case 1: return  "CONTACT";
-            case 2: return "GROUP";
+            case 1: return "GROUP";
+            case 2: return  "All User";
             default: return null;
         }
     }

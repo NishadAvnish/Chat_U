@@ -30,11 +30,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Setting_Activity extends AppCompatActivity implements View.OnClickListener{
@@ -45,8 +47,6 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
     StorageReference firebaseStorageref;
     FirebaseAuth mAuth;
     String currentUserID;
-    Integer count=1;
-    String downloadUrl;
     AlertDialog alertDialog;
 
 
@@ -113,9 +113,15 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
                 if(((dataSnapshot.exists())&& (dataSnapshot.hasChild("Name"))&&(dataSnapshot.hasChild("Status")))&& dataSnapshot.hasChild("Image")){
                     String mName=dataSnapshot.child("Name").getValue().toString();
                     String mStatus=dataSnapshot.child("Status").getValue().toString();
+                    String mImage=dataSnapshot.child("Image").getValue().toString();
                     name.setText(mName);
                     status.setText(mStatus);
-                    Picasso.get().load("https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiSnZ7T14DgAhXMuI8KHRtiCl8QMwhnKAEwAQ&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMinions_(Despicable_Me)&psig=AOvVaw08Qdlb6vqKabxMn6Km9Kmg&ust=1548222300582881&ictx=3&uact=3").into(face);
+
+                    try {
+                        Picasso.get().load(mImage).into(face);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -197,14 +203,21 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
                     final ProgressDialog progressDialog= new ProgressDialog(this);
                     progressDialog.setMessage("wait until we work for you");
                     progressDialog.show();
-
-                    (firebaseStorageref.child(currentUserID + ".jpg")).putFile(resulturi).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    final StorageReference fs=firebaseStorageref.child(currentUserID + ".jpg");
+                    (fs).putFile(resulturi).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                             if(task.isSuccessful()){
-                                downloadUrl=task.getResult().getMetadata().getReference().getDownloadUrl().toString();
-                                databaseRef.child("User").child(currentUserID).child("Image").setValue(downloadUrl);
+                               // final String downloadUrl=task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+
                                 Toast.makeText(Setting_Activity.this,"Successfully uploaded",Toast.LENGTH_SHORT).show();
+                                fs.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                      String Url=uri.toString();
+                                        databaseRef.child("User").child(currentUserID).child("Image").setValue(Url);
+                                    }
+                                });
                             }
                         }
                     });

@@ -35,7 +35,7 @@ public class adapter extends RecyclerView.Adapter<adapter.myViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull myViewHolder myViewHolder, int i) {
         databook databook= arraylist.get(i);
-      if((databook.user).equals((FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+      if(databook.user!=null &&(databook.user).equals((FirebaseAuth.getInstance().getCurrentUser().getUid()))){
           myViewHolder.ownll.setVisibility(View.VISIBLE);
           myViewHolder.otherll.setVisibility(View.INVISIBLE);
           myViewHolder.ownName.setText(databook.Name);
