@@ -1,4 +1,4 @@
-package com.example.avnish.whatsapp_clone.REcyclerView;
+package com.example.avnish.whatsapp_clone.CHAT_RecyclerView;
 
 public class databook {
 

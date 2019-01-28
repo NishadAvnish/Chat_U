@@ -1,4 +1,4 @@
-package com.example.avnish.whatsapp_clone.REcyclerView;
+package com.example.avnish.whatsapp_clone.CHAT_RecyclerView;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +13,6 @@ import com.example.avnish.whatsapp_clone.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class adapter extends RecyclerView.Adapter<adapter.myViewHolder> {
     ArrayList<databook> arraylist;
@@ -27,7 +26,7 @@ public class adapter extends RecyclerView.Adapter<adapter.myViewHolder> {
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview,viewGroup,false);
+        View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.chat_recyclerview,viewGroup,false);
 
         return new myViewHolder(view);
     }

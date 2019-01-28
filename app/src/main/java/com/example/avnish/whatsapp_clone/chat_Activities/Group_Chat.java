@@ -8,14 +8,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 
 import com.example.avnish.whatsapp_clone.R;
-import com.example.avnish.whatsapp_clone.REcyclerView.adapter;
-import com.example.avnish.whatsapp_clone.REcyclerView.databook;
+import com.example.avnish.whatsapp_clone.CHAT_RecyclerView.adapter;
+import com.example.avnish.whatsapp_clone.CHAT_RecyclerView.databook;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

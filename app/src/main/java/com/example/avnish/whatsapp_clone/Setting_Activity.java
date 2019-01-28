@@ -216,6 +216,7 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
                                     public void onSuccess(Uri uri) {
                                       String Url=uri.toString();
                                         databaseRef.child("User").child(currentUserID).child("Image").setValue(Url);
+                                        progressDialog.dismiss();
                                     }
                                 });
                             }
