@@ -1,4 +1,4 @@
-package com.example.avnish.whatsapp_clone;
+package com.example.avnish.whatsapp_clone.Basic_Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.avnish.whatsapp_clone.Login.LoginActivity;
+import com.example.avnish.whatsapp_clone.R;
 import com.example.avnish.whatsapp_clone.fragment.greenAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayout = findViewById(R.id.tablayout);
             myViewPager = findViewById(R.id.viewpager);
             databaseReference = FirebaseDatabase.getInstance().getReference();
+            mAuth=FirebaseAuth.getInstance();
 
         }
 
@@ -91,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.menufindfriend: {
+                Intent intent=new Intent(MainActivity.this,FindFriend.class);
+                startActivity(intent);
+                break;
             }
 
             case R.id.menulogout: {

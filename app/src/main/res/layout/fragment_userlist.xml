@@ -5,9 +5,10 @@
     android:layout_height="wrap_content"
     tools:context=".fragment.AllUserFragment">
 <android.support.v7.widget.RecyclerView
-    android:id="@+id/Recyclerview"
+    android:id="@+id/alluserrecyclerview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
 </android.support.v7.widget.RecyclerView>
 

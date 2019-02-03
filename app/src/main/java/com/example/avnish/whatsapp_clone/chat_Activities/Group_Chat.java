@@ -155,7 +155,6 @@ public class Group_Chat extends AppCompatActivity {
         currentUserId=(FirebaseAuth.getInstance().getCurrentUser().getUid());
         recyclerView=findViewById(R.id.Recyclerview);
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
-        ;
         recyclerView.setLayoutManager(linearLayoutManager);
         scrollView=findViewById(R.id.scollview);
         }

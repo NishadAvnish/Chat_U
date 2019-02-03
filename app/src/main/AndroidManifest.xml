@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Basic_Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,11 +22,13 @@
         </activity>
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.RegisterActivity" />
-        <activity android:name=".Setting_Activity" />
+        <activity android:name=".Basic_Activity.Setting_Activity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".chat_Activities.Group_Chat"></activity>
+        <activity android:name=".chat_Activities.Group_Chat" />
+        <activity android:name=".Basic_Activity.ProfileActivity" />
+        <activity android:name=".Basic_Activity.FindFriend" />
     </application>
 
 </manifest>

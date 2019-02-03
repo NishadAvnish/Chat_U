@@ -1,8 +1,7 @@
-package com.example.avnish.whatsapp_clone;
+package com.example.avnish.whatsapp_clone.Basic_Activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -19,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.avnish.whatsapp_clone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -30,13 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class Setting_Activity extends AppCompatActivity implements View.OnClickListener{
@@ -94,7 +91,10 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
                                 HashMap<String,String> map=new HashMap<>(2);
                                 map.put("Name",Username);
                                 map.put("Status",Userstatus);
+                                map.put("Uid",currentUserID);
                                 databaseRef.child("User").child(currentUserID).setValue(map);
+
+
                             }
 
                         }
@@ -203,6 +203,7 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
                     final ProgressDialog progressDialog= new ProgressDialog(this);
                     progressDialog.setMessage("wait until we work for you");
                     progressDialog.show();
+
                     final StorageReference fs=firebaseStorageref.child(currentUserID + ".jpg");
                     (fs).putFile(resulturi).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override

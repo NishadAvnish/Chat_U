@@ -41,7 +41,6 @@ public class adapter extends RecyclerView.Adapter<adapter.myViewHolder> {
           myViewHolder.ownDate.setText(databook.Date);
           myViewHolder.ownMsg.setText(databook.Msg);
           myViewHolder.ownTime.setText(databook.Time);
-
           myViewHolder.ownName.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
       }
       else{
@@ -52,6 +51,14 @@ public class adapter extends RecyclerView.Adapter<adapter.myViewHolder> {
           myViewHolder.othermsg.setText(databook.Msg);
           myViewHolder.othertime.setText(databook .Time);
       }
+
+
+      myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+
+          }
+      });
 
     }
 

@@ -1,6 +1,5 @@
 package com.example.avnish.whatsapp_clone.Login;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.avnish.whatsapp_clone.MainActivity;
+import com.example.avnish.whatsapp_clone.Basic_Activity.MainActivity;
 import com.example.avnish.whatsapp_clone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

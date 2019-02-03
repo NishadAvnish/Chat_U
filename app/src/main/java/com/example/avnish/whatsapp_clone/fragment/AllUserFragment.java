@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AllUserFragment extends Fragment {
     RecyclerView recyclerView;
@@ -29,34 +30,26 @@ public class AllUserFragment extends Fragment {
     ArrayList<UserList_Databook> arrayList;
     userlist_Adapter mAdapter;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_userlist, container, false);
-        //initialize()
-        {
-            recyclerView = (RecyclerView) view.findViewById(R.id.Recyclerview);
-            linearLayoutManager = new LinearLayoutManager(getContext());
-            recyclerView.setLayoutManager(linearLayoutManager);
-            mAdapter = new userlist_Adapter(arrayList);
-            recyclerView.setAdapter(mAdapter);
-            fetchData();
-
-        }
-
-        return view;
-    }
-
-    private void fetchData() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerView = (RecyclerView) view.findViewById(R.id.alluserrecyclerview);
         arrayList = new ArrayList<>();
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        mAdapter = new userlist_Adapter(arrayList,2,getContext());
+        recyclerView.setAdapter(mAdapter);
+
         FirebaseDatabase.getInstance().getReference().child("User").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    UserList_Databook databook = dataSnapshot.getValue(UserList_Databook.class);
+                    UserList_Databook databook= dataSnapshot1.getValue(UserList_Databook.class);
                     arrayList.add(databook);
+
                     mAdapter.notifyDataSetChanged();
                 }
+
 
 
             }
@@ -66,6 +59,19 @@ public class AllUserFragment extends Fragment {
 
             }
         });
+
+
+
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_userlist, container, false);
+
+
+        return view;
+    }
+
 
 }
