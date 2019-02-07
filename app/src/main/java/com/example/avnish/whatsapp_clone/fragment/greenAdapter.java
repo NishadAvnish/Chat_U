@@ -18,8 +18,8 @@ public class greenAdapter extends FragmentStatePagerAdapter {
             case 1:groupFragment groupFragment= new groupFragment();
                     return groupFragment;
 
-            case 2: AllUserFragment allUserFragment = new AllUserFragment();
-                return allUserFragment;
+            case 2: Request request = new Request();
+                return request;
 
             default:
                 return null;
@@ -39,7 +39,7 @@ public class greenAdapter extends FragmentStatePagerAdapter {
         switch(position){
             case 0: return "CHAT";
             case 1: return "GROUP";
-            case 2: return  "All User";
+            case 2: return  "REQUEST";
             default: return null;
         }
     }

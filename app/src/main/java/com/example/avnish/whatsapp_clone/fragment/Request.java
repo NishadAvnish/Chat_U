@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AllUserFragment extends Fragment {
+public class Request extends Fragment {
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     ArrayList<UserList_Databook> arrayList;
     userlist_Adapter mAdapter;
+    String key;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -40,14 +42,34 @@ public class AllUserFragment extends Fragment {
         mAdapter = new userlist_Adapter(arrayList,2,getContext());
         recyclerView.setAdapter(mAdapter);
 
-        FirebaseDatabase.getInstance().getReference().child("User").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("User").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child("FriendRequest").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    UserList_Databook databook= dataSnapshot1.getValue(UserList_Databook.class);
-                    arrayList.add(databook);
+                for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) {
+                   key=dataSnapshot1.getKey();
+                   if(key !=null) {
+                       FirebaseDatabase.getInstance().getReference().child("User").child(key)
+                               .addListenerForSingleValueEvent(new ValueEventListener() {
+                                   @Override
+                                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                       UserList_Databook databook= dataSnapshot.getValue(UserList_Databook.class);
+                                       arrayList.add(databook);
+                                       mAdapter.notifyDataSetChanged();
+                                   }
 
-                    mAdapter.notifyDataSetChanged();
+                                   @Override
+                                   public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                   }
+                               });
+
+
+
+                   }
+
+
+
+
                 }
 
 

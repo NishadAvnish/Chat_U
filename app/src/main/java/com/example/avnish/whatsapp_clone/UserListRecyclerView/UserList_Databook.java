@@ -6,12 +6,10 @@ public String Image,Name,Status,Uid;
     public UserList_Databook() {
     }
 
-    public UserList_Databook(String image, String name, String status,String Uid) {
+    public UserList_Databook(String image, String name, String status, String uid, String sendRequest) {
         Image = image;
         Name = name;
         Status = status;
-        this.Uid=Uid;
+        Uid = uid;
     }
-
-
 }

@@ -55,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
       databaseRef.child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("SendRequest").child(Uid).child("flag").addValueEventListener(new ValueEventListener() {
           @Override
           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-             if(dataSnapshot.exists()&& dataSnapshot.getValue().toString().equals("yes")){
+             if(dataSnapshot.exists()&& dataSnapshot.getValue().toString().equals("yes")|| Uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                  sendRequest.setEnabled(false);
              }
           }
@@ -128,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-    // for send and delete the request
+    // ---------------------------to send and delete the request------------------------------------//
     @Override
     public void onClick(View v) {
 
