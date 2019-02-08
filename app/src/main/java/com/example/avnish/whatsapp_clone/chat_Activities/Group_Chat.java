@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,12 +36,12 @@ public class Group_Chat extends AppCompatActivity {
     EditText sendEdit;
     Button send_btn;
     DatabaseReference databaseRef;
-    String currentUserId,username;
+    String currentUserId,username,Uid;
     RecyclerView recyclerView;
     HashMap<String,String> map;
     ArrayList<databook> arrayList=null;
     adapter mAdapter;
-    ScrollView scrollView;
+    Integer flag=0;
 
 
     @Override
@@ -51,7 +52,12 @@ public class Group_Chat extends AppCompatActivity {
         Initialize();
 
         if(i.getExtras()!=null){
-            currentGroupName=i.getExtras().get("currentGroupName").toString();
+
+            flag=i.getExtras().getInt("CHATACTIVITY");
+            if(flag==3)
+                 Uid=i.getExtras().get("Tag").toString();
+            else
+                currentGroupName=i.getExtras().get("currentGroupName").toString();
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(currentGroupName);
 
@@ -64,28 +70,77 @@ public class Group_Chat extends AppCompatActivity {
 
     private void retrieve() {
         arrayList= new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("Group").child(currentGroupName).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               if(dataSnapshot.exists()){
-                     for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
+        arrayList.clear();
+        if(flag==3){
+            FirebaseDatabase.getInstance().getReference().child("CHAT").child(Uid+currentUserId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
 
-                     arrayList.add(dataSnapshot1.getValue(databook.class));
-                    // mAdapter.notifyDataSetChanged();
-                   scrollView.fullScroll(View.FOCUS_DOWN);
+                            arrayList.add(dataSnapshot1.getValue(databook.class));
+                        // mAdapter.notifyDataSetChanged();
+                    }
+
+                    else{
+                        FirebaseDatabase.getInstance().getReference().child("CHAT").child(currentUserId+Uid).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
+
+                                        arrayList.add(dataSnapshot1.getValue(databook.class));
+                                    // mAdapter.notifyDataSetChanged();
+                                   // scrollView.fullScroll(View.FOCUS_DOWN);
+                                }
+                                mAdapter = new adapter(arrayList, name());
+                                recyclerView.setAdapter(mAdapter);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
+                    mAdapter = new adapter(arrayList, name());
+                    recyclerView.setAdapter(mAdapter);
+
+
                 }
 
-                mAdapter= new adapter(arrayList,name());
-                recyclerView.setAdapter(mAdapter);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-
-            @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
 
         }
-    });
 
+      else {
+            FirebaseDatabase.getInstance().getReference("Group").child(currentGroupName).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
+
+                            arrayList.add(dataSnapshot1.getValue(databook.class));
+                        // mAdapter.notifyDataSetChanged();
+                      //  scrollView.fullScroll(View.FOCUS_DOWN);
+                    }
+
+                    mAdapter = new adapter(arrayList, name());
+                    recyclerView.setAdapter(mAdapter);
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
 
 
 }
@@ -103,24 +158,63 @@ public class Group_Chat extends AppCompatActivity {
                         Calendar calender = Calendar.getInstance();
                         String date = new SimpleDateFormat("EEE,MMM d,yyyy").format(calender.getTime());
                         String time = new SimpleDateFormat("h:mm a").format(calender.getTime());
-                        databaseRef = FirebaseDatabase.getInstance().getReference("Group").child(currentGroupName);
                         map = new HashMap<>();
                         map.put("Msg", sendEdit.getText().toString().trim());
                         map.put("Date", date);
                         map.put("Time", time);
-                        map.put("Name",name());
-                        map.put("user",currentUserId);}
+                        map.put("Name", name());
+                        map.put("user", currentUserId);
 
 
-                        databaseRef.push().setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            sendEdit.setText("");
-                            scrollView.fullScroll(View.FOCUS_DOWN);
+                        //---------------------------------to make make and write the data to one one tone chat activity------------///
+                        if (flag == 3) {
+                            FirebaseDatabase.getInstance().getReference().child("CHAT").child(currentUserId + Uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        FirebaseDatabase.getInstance().getReference().child("CHAT").child(currentUserId + Uid).push().setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                sendEdit.setText("");
+                                             //   scrollView.fullScroll(View.FOCUS_DOWN);
+
+                                            }
+                                        });
+                                    } else {
+                                        Log.i("TAG", "fhgfhgf");
+                                        FirebaseDatabase.getInstance().getReference().child("CHAT").child(Uid + currentUserId).push().setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                sendEdit.setText("");
+                                             //   scrollView.fullScroll(View.FOCUS_DOWN);
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
 
                         }
-                    });
 
+
+                        ////-------------------------------GROUPCHAT--------------------------------//////////////
+                        else {
+                            FirebaseDatabase.getInstance().getReference("Group").child(currentGroupName).push().setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sendEdit.setText("");
+                                   // scrollView.fullScroll(View.FOCUS_DOWN);
+
+                                }
+                            });
+                        }
+                    }
                 }
             });
 
@@ -156,7 +250,6 @@ public class Group_Chat extends AppCompatActivity {
         recyclerView=findViewById(R.id.Recyclerview);
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        scrollView=findViewById(R.id.scollview);
         }
 
 }

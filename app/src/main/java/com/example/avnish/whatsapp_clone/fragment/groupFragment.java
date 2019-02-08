@@ -43,6 +43,7 @@ public class groupFragment extends Fragment {
                 String groupname=parent.getItemAtPosition(position).toString();
                 Intent i= new Intent(getContext(),Group_Chat.class);
                 i.putExtra("currentGroupName",groupname);
+                i.putExtra("CHATACTIVITY",1);
                 startActivity(i);
             }
         });

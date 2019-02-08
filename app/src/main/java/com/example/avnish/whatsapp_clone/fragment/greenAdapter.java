@@ -18,8 +18,8 @@ public class greenAdapter extends FragmentStatePagerAdapter {
             case 1:groupFragment groupFragment= new groupFragment();
                     return groupFragment;
 
-            case 2: Request request = new Request();
-                return request;
+            case 2: RequestList requestList = new RequestList();
+                return requestList;
 
             default:
                 return null;

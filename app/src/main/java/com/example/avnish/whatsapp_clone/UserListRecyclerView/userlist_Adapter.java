@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.avnish.whatsapp_clone.Basic_Activity.ProfileActivity;
 import com.example.avnish.whatsapp_clone.R;
+import com.example.avnish.whatsapp_clone.chat_Activities.Group_Chat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,7 +40,7 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
     @Override
     public userlist_Adapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view;
-        if(flag==1){
+        if(flag==1 || flag==3){
         view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.userlist_recyclerview,viewGroup,false);}
         else{ view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.acceptrequest,viewGroup,false);}
 
@@ -50,11 +51,12 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
     public void onBindViewHolder(@NonNull final userlist_Adapter.myViewHolder myViewHolder, final int i) {
         final UserList_Databook databook= arrayList.get(i);
 
-       if(flag==1) {
+       if(flag==1||flag==3) {
            myViewHolder.listusername.setText(databook.Name);
            myViewHolder.listuserstatus.setText(databook.Status);
            Picasso.get().load(databook.Image).into(myViewHolder.listface);
        }
+
        else{
            myViewHolder.acceptName.setText(databook.Name);
            Picasso.get().load(databook.Image).into(myViewHolder.acceptImage);
@@ -74,6 +76,21 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
             });
         }
 
+        else if (flag==3){
+           myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                  Intent intent= new Intent(v.getContext(),Group_Chat.class);
+                  intent.putExtra("CHATACTIVITY",3);
+                  String userId=(arrayList.get(i).Uid).toString();
+                  intent.putExtra("Tag",userId);
+                  v.getContext().startActivity(intent);
+
+               }
+           });
+
+       }
+
        else{
                   myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -85,6 +102,7 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
                               public void onClick(View v) {
                                   Toast.makeText(context,"Accept",Toast.LENGTH_SHORT).show();
                                   FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Friend").child(arrayList.get(i).Uid).setValue("yes");
+                                  FirebaseDatabase.getInstance().getReference().child("User").child(arrayList.get(i).Uid).child("Friend").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("yes");
 
 
                                   //-------------------------TO remove friend request section---------------------------//
