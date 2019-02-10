@@ -3,6 +3,7 @@ package com.example.avnish.whatsapp_clone.chat_Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 
 import com.example.avnish.whatsapp_clone.R;
 import com.example.avnish.whatsapp_clone.CHAT_RecyclerView.adapter;
@@ -43,7 +43,6 @@ public class Group_Chat extends AppCompatActivity {
     adapter mAdapter;
     Integer flag=0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,15 +60,23 @@ public class Group_Chat extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(currentGroupName);
 
-          retrieve();  //convert the data value from firebase into object
-          writeData();
+            retrieve();  //convert the data value from firebase into object
+
+            send_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    writeData();
+                }
+            });
+
         }
 
 
     }
 
     private void retrieve() {
-        arrayList= new ArrayList<>();
+
+
         arrayList.clear();
         if(flag==3){
             FirebaseDatabase.getInstance().getReference().child("CHAT").child(Uid+currentUserId).addValueEventListener(new ValueEventListener() {
@@ -77,10 +84,9 @@ public class Group_Chat extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
-
-                            arrayList.add(dataSnapshot1.getValue(databook.class));
-                        // mAdapter.notifyDataSetChanged();
-                    }
+                        {  arrayList.add(dataSnapshot1.getValue(databook.class));
+                            mAdapter.notifyDataSetChanged();
+                    }}
 
                     else{
                         FirebaseDatabase.getInstance().getReference().child("CHAT").child(currentUserId+Uid).addValueEventListener(new ValueEventListener() {
@@ -89,12 +95,11 @@ public class Group_Chat extends AppCompatActivity {
                                 if (dataSnapshot.exists()) {
                                     for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
 
-                                        arrayList.add(dataSnapshot1.getValue(databook.class));
-                                    // mAdapter.notifyDataSetChanged();
+                                    {arrayList.add(dataSnapshot1.getValue(databook.class));
+                                        mAdapter.notifyDataSetChanged();}
                                    // scrollView.fullScroll(View.FOCUS_DOWN);
                                 }
-                                mAdapter = new adapter(arrayList, name());
-                                recyclerView.setAdapter(mAdapter);
+
                             }
 
                             @Override
@@ -103,9 +108,6 @@ public class Group_Chat extends AppCompatActivity {
                             }
                         });
                     }
-
-                    mAdapter = new adapter(arrayList, name());
-                    recyclerView.setAdapter(mAdapter);
 
 
                 }
@@ -125,13 +127,12 @@ public class Group_Chat extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
 
+                        {
                             arrayList.add(dataSnapshot1.getValue(databook.class));
-                        // mAdapter.notifyDataSetChanged();
-                      //  scrollView.fullScroll(View.FOCUS_DOWN);
+                            mAdapter.notifyDataSetChanged();
+                            //  scrollView.fullScroll(View.FOCUS_DOWN);
+                        }
                     }
-
-                    mAdapter = new adapter(arrayList, name());
-                    recyclerView.setAdapter(mAdapter);
 
                 }
 
@@ -147,11 +148,10 @@ public class Group_Chat extends AppCompatActivity {
 
     private void writeData() {
 
+        arrayList.clear();
+        mAdapter.notifyDataSetChanged();
 
 
-            send_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
                     if(sendEdit.getText().toString()!=null) {
 
@@ -215,11 +215,10 @@ public class Group_Chat extends AppCompatActivity {
                             });
                         }
                     }
-                }
-            });
-
 
         }
+
+
 
         private String name(){
 
@@ -250,6 +249,9 @@ public class Group_Chat extends AppCompatActivity {
         recyclerView=findViewById(R.id.Recyclerview);
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        arrayList= new ArrayList<>();
+        mAdapter = new adapter(arrayList, name());
+        recyclerView.setAdapter(mAdapter);
         }
 
 }

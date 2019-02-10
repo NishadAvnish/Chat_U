@@ -118,7 +118,7 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
                     status.setText(mStatus);
 
                     try {
-                        Picasso.get().load(mImage).into(face);
+                        Picasso.get().load(mImage).placeholder(R.drawable.face).into(face);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -59,7 +59,7 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
 
        else{
            myViewHolder.acceptName.setText(databook.Name);
-           Picasso.get().load(databook.Image).into(myViewHolder.acceptImage);
+           Picasso.get().load(databook.Image).placeholder(R.drawable.face).into(myViewHolder.acceptImage);
        }
 
        if(flag==1){
@@ -196,6 +196,7 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
             listusername=(TextView)itemView.findViewById(R.id.userlistname);
             listuserstatus=(TextView)itemView.findViewById(R.id.userliststatus);
             listface=(ImageView)itemView.findViewById(R.id.userlistface);
+            listface.setImageResource(R.drawable.face);
 
 
             acceptName=(TextView)itemView.findViewById(R.id.acceptName);

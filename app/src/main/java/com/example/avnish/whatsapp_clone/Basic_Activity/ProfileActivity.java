@@ -33,9 +33,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile2);
 
+
         //initialze
         {
             image = findViewById(R.id.ProfileImage);
+            image.setImageResource(R.drawable.face);
             name = findViewById(R.id.ProfileName);
             sendRequest = findViewById(R.id.Profilesendrequest);
             deleteRequest = findViewById(R.id.Profiledeleterequest);
