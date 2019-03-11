@@ -152,32 +152,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
             case R.id.Profiledeleterequest: {
-                databaseRef.child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("SendRequest").child(Uid).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        dataSnapshot.getRef().removeValue();
-
-                        databaseRef.child("User").child(Uid).child("FriendRequest").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                databaseRef.child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("SendRequest").child(Uid).setValue(null).
+                        addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-                                dataSnapshot1.getRef().removeValue();
+                            public void onSuccess(Void aVoid) {
+                                databaseRef.child("User").child(Uid).child("FriendRequest").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(null);
                                 sendRequest.setEnabled(true);
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
                         });
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+               break;}
 
-                    }
-                });
-                   break;
-            }
         }
     }
 }

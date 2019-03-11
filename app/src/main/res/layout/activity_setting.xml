@@ -29,7 +29,7 @@
             android:layout_height="60dp"
             android:layout_gravity="center|bottom"
             android:onClick="takeImage"
-            android:src="@drawable/ic_camera_black_24dp" />
+            android:src="@drawable/ic_add_a_photo_black_24dp" />
     </FrameLayout>
 
 

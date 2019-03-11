@@ -48,10 +48,11 @@ public class RequestList extends Fragment {
                        FirebaseDatabase.getInstance().getReference().child("User").child(key)
                                .addListenerForSingleValueEvent(new ValueEventListener() {
                                    @Override
-                                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                       UserList_Databook databook= dataSnapshot.getValue(UserList_Databook.class);
+                                   public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                                       UserList_Databook databook= dataSnapshot2.getValue(UserList_Databook.class);
                                        arrayList.add(databook);
                                        mAdapter.notifyDataSetChanged();
+
                                    }
 
                                    @Override
@@ -59,18 +60,8 @@ public class RequestList extends Fragment {
 
                                    }
                                });
-
-
-
                    }
-
-
-
-
                 }
-
-
-
             }
 
             @Override

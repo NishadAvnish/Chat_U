@@ -106,34 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
 
-
-            case R.id.creategroup: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                final EditText groupName = new EditText(this);
-                builder.setView(groupName)
-                        .setCancelable(true)
-                        .setTitle("Enter the group name");
-                builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String groupName1 = groupName.getText().toString();
-                        databaseReference.child("Group").child(groupName1).setValue("").addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(MainActivity.this, "group created", Toast.LENGTH_SHORT).show();
-                                alertDialog.dismiss();
-
-                            }
-                        });
-                    }
-                });
-                alertDialog = builder.create();
-                alertDialog.show();
-
-            }
-
-
         }
+
         return true;
     }
 }

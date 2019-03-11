@@ -15,10 +15,7 @@ public class greenAdapter extends FragmentStatePagerAdapter {
             case 0: chatfragment chatFragment=new chatfragment();
                      return chatFragment;
 
-            case 1:groupFragment groupFragment= new groupFragment();
-                    return groupFragment;
-
-            case 2: RequestList requestList = new RequestList();
+            case 1: RequestList requestList = new RequestList();
                 return requestList;
 
             default:
@@ -30,7 +27,7 @@ public class greenAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable
@@ -38,8 +35,7 @@ public class greenAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch(position){
             case 0: return "CHAT";
-            case 1: return "GROUP";
-            case 2: return  "REQUEST";
+            case 1: return  "REQUEST";
             default: return null;
         }
     }

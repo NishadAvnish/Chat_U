@@ -1,4 +1,4 @@
-package com.example.avnish.whatsapp_clone.chat_Activities;
+package com.example.avnish.whatsapp_clone.CHAT_RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -94,9 +94,11 @@ public class Group_Chat extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
+                                    {
+                                        arrayList.add(dataSnapshot1.getValue(databook.class));
+                                        mAdapter.notifyDataSetChanged();
+                                    }
 
-                                    {arrayList.add(dataSnapshot1.getValue(databook.class));
-                                        mAdapter.notifyDataSetChanged();}
                                    // scrollView.fullScroll(View.FOCUS_DOWN);
                                 }
 
@@ -249,9 +251,13 @@ public class Group_Chat extends AppCompatActivity {
         recyclerView=findViewById(R.id.Recyclerview);
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+
         arrayList= new ArrayList<>();
         mAdapter = new adapter(arrayList, name());
         recyclerView.setAdapter(mAdapter);
+
+        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView,new RecyclerView.State(), recyclerView.getAdapter().getItemCount());
+
         }
 
 }
