@@ -125,11 +125,23 @@ public class Setting_Activity extends AppCompatActivity implements View.OnClickL
 
                 }
 
-                else if(((dataSnapshot.exists())&& (dataSnapshot.hasChild("Name")))){
+                else if(((dataSnapshot.exists())&& (dataSnapshot.hasChild("Name")))&& dataSnapshot.hasChild("Status")){
                     String mName=dataSnapshot.child("Name").getValue().toString();
                     String mStatus=dataSnapshot.child("Status").getValue().toString();
                     name.setText(mName);
                     status.setText(mStatus);
+                }
+
+                else if(dataSnapshot.exists() && dataSnapshot.hasChild("Name")){
+                    String mName=dataSnapshot.child("Name").getValue().toString();
+                    name.setText(mName);
+
+                    String mImage=dataSnapshot.child("Image").getValue().toString();
+                    try {
+                        Picasso.get().load(mImage).placeholder(R.drawable.face).into(face);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

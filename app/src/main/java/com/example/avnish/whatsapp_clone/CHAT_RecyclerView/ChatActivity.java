@@ -82,13 +82,13 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //-------------------------TO remove friend section from currentUsre---------------------------//
                 FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child("Friend").setValue(null);
+                        .child("Friend").child(Uid).setValue(null);
 
 
                 //---------------------------To remove friend  section from friend database--------------------------//
 
                 FirebaseDatabase.getInstance().getReference().child("User").child(Uid)
-                        .child("Friend").setValue(null);
+                        .child("Friend").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(null);
 
 
                 //----------------------------To remove chat section------------------------------------------------//

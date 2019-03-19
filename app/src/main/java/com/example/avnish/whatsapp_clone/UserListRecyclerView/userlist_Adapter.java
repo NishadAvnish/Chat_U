@@ -60,8 +60,10 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
         //-------------------------------FOR  CHAT FRAGEMNT AND FIND FRIEND-------------------------------------//
         if(flag==1||flag==3) {
             myViewHolder.listusername.setText(databook.Name);
-            myViewHolder.listuserstatus.setText(databook.Status);
-            Picasso.get().load(databook.Image).into(myViewHolder.listface);
+            if(databook.Status != "")
+            {myViewHolder.listuserstatus.setText(databook.Status);}
+
+            Picasso.get().load(databook.Image).placeholder(R.drawable.face).into(myViewHolder.listface);
         }
 
 
@@ -164,22 +166,16 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
                 }
             });
 
-            myViewHolder.listface.setOnClickListener(new View.OnClickListener() {
+       /*  myViewHolder.listface.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openImageDialog(i,context);
                 }
-            });
+            });*/
         }
 
-
-
-
-
-
-
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -202,9 +198,7 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
             listusername=(TextView)itemView.findViewById(R.id.userlistname);
             listuserstatus=(TextView)itemView.findViewById(R.id.userliststatus);
             listface=(ImageView)itemView.findViewById(R.id.userlistface);
-            if(listface!=null) {
-                listface.setImageResource(R.drawable.face);
-            }
+
 
             acceptName=(TextView)itemView.findViewById(R.id.acceptName);
             acceptImage=(ImageView)itemView.findViewById(R.id.acceptImage);
@@ -226,7 +220,10 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
         TextView Name = (TextView) dialog.findViewById(R.id.dialogText);
         Name.setText(arrayList.get(i).Name);
         ImageView image = (ImageView) dialog.findViewById(R.id.dialogImage);
-        Picasso.get().load(arrayList.get(i).Image).fit().into(image);
+
+
+        Picasso.get().load(arrayList.get(i).Image).placeholder(R.drawable.face).fit().into(image);
+
 
         ImageView delete = (ImageView) dialog.findViewById(R.id.dialogCancelbtn);
         delete.setOnClickListener(new View.OnClickListener() {

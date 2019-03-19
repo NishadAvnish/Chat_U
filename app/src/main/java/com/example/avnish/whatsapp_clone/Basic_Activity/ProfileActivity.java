@@ -103,7 +103,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 if (((dataSnapshot.exists()) && (dataSnapshot.hasChild("Name")) && dataSnapshot.hasChild("Image"))) {
                     String mName = dataSnapshot.child("Name").getValue().toString();
-                    String mStatus = dataSnapshot.child("Status").getValue().toString();
                     String mImage = dataSnapshot.child("Image").getValue().toString();
                     name.setText(mName);
 
