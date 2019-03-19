@@ -166,12 +166,12 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
                 }
             });
 
-       /*  myViewHolder.listface.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.acceptImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openImageDialog(i,context);
                 }
-            });*/
+            });
         }
 
     }

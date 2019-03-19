@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class chatfragment extends Fragment {
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
-    ArrayList<UserList_Databook> arrayList;
+    ArrayList<UserList_Databook> arrayList=new ArrayList<>();
     userlist_Adapter mAdapter;
     String key;
     int count=1;
@@ -39,9 +39,11 @@ public class chatfragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         Log.d("SET","SET USER VISIBLE");
         if(isVisibleToUser)
-        {   if(count!=1)
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-
+        {   if(count%2==0)
+            {getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            }
+            arrayList.clear();
+            count=1;
         }
     }
 
@@ -52,7 +54,6 @@ public class chatfragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d("SET","onView CREATED");
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-        arrayList = new ArrayList<>();
         count=count+1;
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
