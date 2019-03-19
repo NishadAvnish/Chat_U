@@ -124,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
             register = findViewById(R.id.register);
             forgetpassword = findViewById(R.id.forgetpassword);
             login = findViewById(R.id.login);
-            phoneLogin = findViewById(R.id.loginusingphone);
             mAuth = FirebaseAuth.getInstance();
             progressBar = new ProgressDialog(this);
 

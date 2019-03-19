@@ -2,6 +2,7 @@ package com.example.avnish.whatsapp_clone.Basic_Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     AlertDialog alertDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayout = findViewById(R.id.tablayout);
             myViewPager = findViewById(R.id.viewpager);
             databaseReference = FirebaseDatabase.getInstance().getReference();
-            mAuth=FirebaseAuth.getInstance();
+            mAuth = FirebaseAuth.getInstance();
 
         }
 
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.menufindfriend: {
-                Intent intent=new Intent(MainActivity.this,FindFriend.class);
+                Intent intent = new Intent(MainActivity.this, FindFriend.class);
                 startActivity(intent);
                 break;
             }
@@ -110,5 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+
+
 }
 

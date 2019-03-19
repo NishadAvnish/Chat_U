@@ -1,9 +1,9 @@
 package com.example.avnish.whatsapp_clone.CHAT_RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.avnish.whatsapp_clone.R;
-import com.example.avnish.whatsapp_clone.CHAT_RecyclerView.adapter;
-import com.example.avnish.whatsapp_clone.CHAT_RecyclerView.databook;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class Group_Chat extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
     Intent i;
     String currentGroupName;
     Toolbar toolbar;
@@ -42,6 +41,8 @@ public class Group_Chat extends AppCompatActivity {
     ArrayList<databook> arrayList=null;
     adapter mAdapter;
     Integer flag=0;
+    ImageView deletebtn;
+    int i_value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,10 @@ public class Group_Chat extends AppCompatActivity {
 
             flag=i.getExtras().getInt("CHATACTIVITY");
             if(flag==3)
-                 Uid=i.getExtras().get("Tag").toString();
+                {
+                Uid = i.getExtras().get("Tag").toString();
+                }
+
             else
                 currentGroupName=i.getExtras().get("currentGroupName").toString();
             setSupportActionBar(toolbar);
@@ -69,10 +73,37 @@ public class Group_Chat extends AppCompatActivity {
                 }
             });
 
+
+
         }
 
+        deletebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //-------------------------TO remove friend section from currentUsre---------------------------//
+                FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child("Friend").setValue(null);
 
+
+                //---------------------------To remove friend  section from friend database--------------------------//
+
+                FirebaseDatabase.getInstance().getReference().child("User").child(Uid)
+                        .child("Friend").setValue(null);
+
+
+                //----------------------------To remove chat section------------------------------------------------//
+                FirebaseDatabase.getInstance().getReference().child("CHAT").child(currentUserId + Uid).setValue(null);
+                FirebaseDatabase.getInstance().getReference().child("CHAT").child(Uid+currentUserId).setValue(null);
+
+                FirebaseDatabase.getInstance().getReference().child("User").child(Uid)
+                        .child("Friend").setValue(null);
+
+
+                finish();
+            }
+        });
     }
+
 
     private void retrieve() {
 
@@ -99,7 +130,6 @@ public class Group_Chat extends AppCompatActivity {
                                         mAdapter.notifyDataSetChanged();
                                     }
 
-                                   // scrollView.fullScroll(View.FOCUS_DOWN);
                                 }
 
                             }
@@ -132,7 +162,7 @@ public class Group_Chat extends AppCompatActivity {
                         {
                             arrayList.add(dataSnapshot1.getValue(databook.class));
                             mAdapter.notifyDataSetChanged();
-                            //  scrollView.fullScroll(View.FOCUS_DOWN);
+
                         }
                     }
 
@@ -170,7 +200,8 @@ public class Group_Chat extends AppCompatActivity {
 
                         //---------------------------------to make make and write the data to one one tone chat activity------------///
                         if (flag == 3) {
-                            FirebaseDatabase.getInstance().getReference().child("CHAT").child(currentUserId + Uid).addValueEventListener(new ValueEventListener() {
+
+                            FirebaseDatabase.getInstance().getReference().child("CHAT").child(currentUserId + Uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
@@ -178,7 +209,7 @@ public class Group_Chat extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 sendEdit.setText("");
-                                             //   scrollView.fullScroll(View.FOCUS_DOWN);
+
 
                                             }
                                         });
@@ -188,7 +219,7 @@ public class Group_Chat extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 sendEdit.setText("");
-                                             //   scrollView.fullScroll(View.FOCUS_DOWN);
+
 
                                             }
                                         });
@@ -247,8 +278,11 @@ public class Group_Chat extends AppCompatActivity {
         toolbar=findViewById(R.id.toolbar);
         sendEdit=findViewById(R.id.hello);
         send_btn=findViewById(R.id.sendbtn);
+        deletebtn=findViewById(R.id.deletebtn);
+
         currentUserId=(FirebaseAuth.getInstance().getCurrentUser().getUid());
         recyclerView=findViewById(R.id.Recyclerview);
+
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 

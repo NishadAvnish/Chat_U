@@ -42,10 +42,17 @@ public class FindFriend extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
+                dataSnapshot.getKey();
                 for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    UserList_Databook databook = dataSnapshot1.getValue(UserList_Databook.class);
-                    arrayList.add(databook);
-                    mAdapter.notifyDataSetChanged();
+                    dataSnapshot1.getKey();
+                    if(dataSnapshot1.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+
+                    }
+                    else {
+                        UserList_Databook databook = dataSnapshot1.getValue(UserList_Databook.class);
+                        arrayList.add(databook);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 

@@ -1,25 +1,26 @@
 package com.example.avnish.whatsapp_clone.UserListRecyclerView;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avnish.whatsapp_clone.Basic_Activity.ProfileActivity;
+import com.example.avnish.whatsapp_clone.CHAT_RecyclerView.ChatActivity;
 import com.example.avnish.whatsapp_clone.R;
-import com.example.avnish.whatsapp_clone.CHAT_RecyclerView.Group_Chat;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,11 +41,13 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
     @Override
     public userlist_Adapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view;
+
+        //3==chat fragment and 1== findfriend
         if(flag==1 || flag==3){
-        view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.userlist_recyclerview,viewGroup,false);}
+            view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.userlist_recyclerview,viewGroup,false);}
 
 
-        else{ view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.acceptrequest,viewGroup,false);}
+        else{ view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.accept_del_requestfragt,viewGroup,false);}
 
         return new myViewHolder(view);
     }
@@ -54,22 +57,22 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
         final UserList_Databook databook= arrayList.get(i);
 
 
-      //-------------------------------FOR  CHAT FRAGEMNT AND FIND FRIEND-------------------------------------//
-       if(flag==1||flag==3) {
-           myViewHolder.listusername.setText(databook.Name);
-           myViewHolder.listuserstatus.setText(databook.Status);
-           Picasso.get().load(databook.Image).into(myViewHolder.listface);
-       }
+        //-------------------------------FOR  CHAT FRAGEMNT AND FIND FRIEND-------------------------------------//
+        if(flag==1||flag==3) {
+            myViewHolder.listusername.setText(databook.Name);
+            myViewHolder.listuserstatus.setText(databook.Status);
+            Picasso.get().load(databook.Image).into(myViewHolder.listface);
+        }
 
 
-       //------------------------------FOR REQUEST FRAGMENT---------------------------------------------------//
-       else{
-           myViewHolder.acceptName.setText(databook.Name);
-           Picasso.get().load(databook.Image).placeholder(R.drawable.face).into(myViewHolder.acceptImage);
-       }
+        //------------------------------FOR REQUEST FRAGMENT---------------------------------------------------//
+        else{
+            myViewHolder.acceptName.setText(databook.Name);
+            Picasso.get().load(databook.Image).placeholder(R.drawable.face).into(myViewHolder.acceptImage);
+        }
 
-       //---------------------------------------------ONCLICK LISTENER-----------------------------------------------//
-       if(flag==1){
+        //---------------------------------------------ONCLICK LISTENER-----------------------------------------------//
+        if(flag==1){
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -84,85 +87,99 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
         }
 
         if (flag==3){
-           myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                  Intent intent= new Intent(v.getContext(),Group_Chat.class);
-                  intent.putExtra("CHATACTIVITY",3);
-                  String userId=(arrayList.get(i).Uid).toString();
-                  intent.putExtra("Tag",userId);
-                  v.getContext().startActivity(intent);
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent= new Intent(v.getContext(),ChatActivity.class);
+                    intent.putExtra("CHATACTIVITY",3);
+                    String userId=(arrayList.get(i).Uid).toString();
+                    intent.putExtra("Tag",userId);
+                    v.getContext().startActivity(intent);
 
-               }
-           });
+                }
+            });
 
-       }
+            myViewHolder.listface.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openImageDialog(i,context);
+                }
+            });
+
+        }
 
 
         if(flag==2){
             myViewHolder.acceptAcceptButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "Accept", Toast.LENGTH_SHORT).show();
-                        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Friend")
-                                .child(arrayList.get(i).Uid).setValue("yes");
-                        FirebaseDatabase.getInstance().getReference().child("User").child(arrayList.get(i).Uid).child("Friend")
-                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("yes");
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Accept", Toast.LENGTH_SHORT).show();
+                    FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Friend")
+                            .child(arrayList.get(i).Uid).setValue("yes");
+                    FirebaseDatabase.getInstance().getReference().child("User").child(arrayList.get(i).Uid).child("Friend")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("yes");
 
 
-                        //-------------------------TO remove friend request section---------------------------//
-                        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .child("FriendRequest").setValue(null);
+                    //-------------------------TO remove friend request section---------------------------//
+                    FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("FriendRequest").setValue(null);
 
 
-                        //---------------------------To remove send friend request section from sender database--------------------------//
+                    //---------------------------To remove send friend request section from sender database--------------------------//
 
-                        FirebaseDatabase.getInstance().getReference().child("User").child(arrayList.get(i).Uid)
-                                .child("SendRequest").setValue(null);
+                    FirebaseDatabase.getInstance().getReference().child("User").child(arrayList.get(i).Uid)
+                            .child("SendRequest").setValue(null);
 
-                        // remove the item from recyclerview
-                        arrayList.remove(i);
-                        notifyItemRemoved(i);
-                        notifyItemRangeChanged(i,arrayList.size());
-                        notifyDataSetChanged();
+                    // remove the item from recyclerview
+                    arrayList.remove(i);
+                    notifyItemRemoved(i);
+                    notifyItemRangeChanged(i,arrayList.size());
+                    notifyDataSetChanged();
 
-                    }
-                });
-
-
-                // for decline button
-               myViewHolder.acceptDeclineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "DECLINE", Toast.LENGTH_SHORT).show();
-
-                        //-------------------------TO remove friend request section---------------------------//
-                        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .child("FriendRequest").setValue(null);
+                }
+            });
 
 
-                        //---------------------------To remove send friend request section from sender database--------------------------//
+            // for decline button
+            myViewHolder.acceptDeclineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "DECLINE", Toast.LENGTH_SHORT).show();
 
-                        FirebaseDatabase.getInstance().getReference().child("User").child(arrayList.get(i).Uid)
-                                .child("SendRequest").setValue(null);
-
-                       // remove the item from recyclerview
-                        arrayList.remove(i);
-                        notifyItemRemoved(i);
-                        notifyItemRangeChanged(i,arrayList.size());
-                        notifyDataSetChanged();
-                    }
-                });
-            }
+                    //-------------------------TO remove friend request section---------------------------//
+                    FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("FriendRequest").setValue(null);
 
 
+                    //---------------------------To remove send friend request section from sender database--------------------------//
 
+                    FirebaseDatabase.getInstance().getReference().child("User").child(arrayList.get(i).Uid)
+                            .child("SendRequest").setValue(null);
 
+                    // remove the item from recyclerview
+                    arrayList.remove(i);
+                    notifyItemRemoved(i);
+                    notifyItemRangeChanged(i,arrayList.size());
+                    notifyDataSetChanged();
+                }
+            });
 
-
-
-
+            myViewHolder.listface.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openImageDialog(i,context);
+                }
+            });
         }
+
+
+
+
+
+
+
+
+    }
 
     @Override
     public int getItemCount() {
@@ -199,5 +216,33 @@ public class userlist_Adapter extends RecyclerView.Adapter<userlist_Adapter.myVi
 
         }
 
+    }
+
+
+    protected void openImageDialog(int i,Context context){
+        final Dialog dialog= new Dialog(context);
+        dialog.setContentView(R.layout.openimagedialog);
+
+        TextView Name = (TextView) dialog.findViewById(R.id.dialogText);
+        Name.setText(arrayList.get(i).Name);
+        ImageView image = (ImageView) dialog.findViewById(R.id.dialogImage);
+        Picasso.get().load(arrayList.get(i).Image).fit().into(image);
+
+        ImageView delete = (ImageView) dialog.findViewById(R.id.dialogCancelbtn);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Point size = new Point();
+        dialog.getWindow().getWindowManager().getDefaultDisplay().getSize(size);
+        int width=size.x;
+        int height=size.y;
+
+        dialog.getWindow().setLayout((int) (width * .75), (int) (height * .60));
+
+        dialog.show();
     }
 }

@@ -31,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile2);
+        setContentView(R.layout.findfriendprofile);
 
 
         //initialze
@@ -70,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
         // to chcek whether the user is already friend or not
-        databaseRef.child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Friends").addValueEventListener(new ValueEventListener() {
+        databaseRef.child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Friend").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()&& dataSnapshot.hasChild(Uid)){

@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Basic_Activity.ProfileActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/rectangle">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ProfileImage"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="300dp"
         android:layout_gravity="center"
         />
@@ -31,7 +33,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:text="SEND REQUEST"
-        android:background="@drawable/rectangle"
+        android:background="@drawable/btnrectangle"
         android:padding="10dp"/>
     <Button
         android:id="@+id/Profiledeleterequest"
@@ -40,7 +42,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:text="DELETE REQUEST"
-        android:background="@drawable/rectangle"
+        android:background="@drawable/btnrectangle"
         android:padding="10dp"/>
 
 </LinearLayout>
