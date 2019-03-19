@@ -64,6 +64,7 @@ public class chatfragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
+                mAdapter.notifyDataSetChanged();
                 for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) {
                     key = dataSnapshot1.getKey();
                     if (key != null) {
